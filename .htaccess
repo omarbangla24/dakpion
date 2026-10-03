@@ -1,0 +1,15 @@
+DirectoryIndex index.php
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Old static URLs → PHP pages
+  RewriteRule ^(index|about|services|industries|portfolio|contact)\.html$ $1.php [R=301,L]
+  # Never serve the database, PHP includes or repo files
+  RewriteRule ^(data|inc)(/|$) - [F,L]
+  RewriteRule (^|/)\.git - [F,L]
+</IfModule>
+
+<FilesMatch "\.(sqlite|sqlite-journal|md)$">
+  Require all denied
+</FilesMatch>

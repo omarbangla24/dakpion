@@ -85,14 +85,30 @@
   }
 
   function initForms() {
-    $$('form[data-form]').forEach(form => form.addEventListener('submit', e => {
+    $$('form[data-form]').forEach(form => form.addEventListener('submit', async e => {
       e.preventDefault();
       if (!form.checkValidity()) { form.reportValidity(); return; }
       const ok = form.parentElement.querySelector('.form-success');
-      form.reset();
-      form.style.display = 'none';
-      ok?.classList.add('show');
-      if (animate && ok) gsap.from(ok.children, { y: 30, opacity: 0, stagger: .08, duration: .8, ease: 'expo.out' });
+      const err = $('.form-error', form);
+      const btn = $('[type=submit]', form);
+      if (btn.disabled) return;
+      btn.disabled = true; btn.style.opacity = '.6';
+      if (err) err.hidden = true;
+      try {
+        const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) throw new Error(data.error || 'Something went wrong. Please try again or email us.');
+        window.gtag?.('event', 'generate_lead');
+        window.fbq?.('track', 'Lead');
+        form.reset();
+        form.style.display = 'none';
+        ok?.classList.add('show');
+        if (animate && ok) gsap.from(ok.children, { y: 30, opacity: 0, stagger: .08, duration: .8, ease: 'expo.out' });
+      } catch (ex) {
+        if (err) { err.textContent = ex instanceof TypeError ? 'Network error — please try again.' : ex.message; err.hidden = false; }
+      } finally {
+        btn.disabled = false; btn.style.opacity = '';
+      }
     }));
   }
 

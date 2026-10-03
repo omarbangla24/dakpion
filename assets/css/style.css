@@ -686,3 +686,27 @@ p { margin:0 0 1em; }
 @media (prefers-reduced-motion:reduce) {
   *, *::before, *::after { animation:none !important; transition-duration:.01ms !important; }
 }
+
+/* ── CMS additions: uploaded images, client logos, WhatsApp, form states ── */
+.thumb--img { color:#fff; }
+.thumb--img::before { display:none; }
+.thumb--img::after { inset:0; width:auto; aspect-ratio:auto; border:0; border-radius:0; background:linear-gradient(180deg, rgba(30,31,33,.25), transparent 35%, transparent 50%, rgba(30,31,33,.8)); }
+.thumb--img > img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .8s var(--ease); }
+.thumb--img > :not(img) { z-index:1; }
+.work-card:hover .thumb--img > img { transform:scale(1.05); }
+.quote .av { overflow:hidden; }
+.quote .av img { width:100%; height:100%; object-fit:cover; }
+.logos { padding:clamp(24px, 4vw, 56px) 0 clamp(40px, 6vw, 80px); }
+.logos-row { display:flex; overflow:hidden; margin-top:10px; mask-image:linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); -webkit-mask-image:linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+.logos-track { display:flex; align-items:center; gap:clamp(40px, 6vw, 88px); padding-right:clamp(40px, 6vw, 88px); flex:none; animation:slide 40s linear infinite; }
+.logos-row:hover .logos-track { animation-play-state:paused; }
+.logo-item img { height:clamp(34px, 4vw, 48px); width:auto; max-width:160px; object-fit:contain; filter:grayscale(1); opacity:.6; transition:filter .4s, opacity .4s; }
+.logo-item img:hover { filter:none; opacity:1; }
+.c-list div a { font-size:14.5px; color:var(--g-700); text-decoration:underline; text-decoration-color:var(--lime); text-underline-offset:3px; }
+.hp { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+.form-error { margin:0 0 16px; padding:12px 16px; border-radius:14px; background:#FDECEA; color:#9B2C1F; font-size:14.5px; }
+.form-error[hidden] { display:none; }
+.wa-float { position:fixed; right:20px; bottom:20px; z-index:70; display:flex; align-items:center; gap:8px; padding:12px 18px 12px 14px; border-radius:var(--r-full); background:#25D366; color:#fff; font-weight:600; font-size:14.5px; box-shadow:0 12px 30px rgba(37,211,102,.35); transition:transform .4s var(--ease); }
+.wa-float:hover { transform:translateY(-3px); }
+.wa-float .icon { width:22px; height:22px; }
+@media (max-width:640px) { .wa-float span { display:none; } .wa-float { padding:14px; right:14px; bottom:14px; } }

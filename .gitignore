@@ -1,0 +1,6 @@
+# Live content — lives on the server, not in git
+/data/*
+!/data/.htaccess
+/uploads/*
+!/uploads/.htaccess
+/inc/local.php
