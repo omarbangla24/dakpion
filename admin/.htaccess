@@ -1,0 +1,8 @@
+# Every admin address (/admin/projects, /admin/blog/3 …) goes through admin/index.php
+DirectoryIndex index.php
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^(views|inc)(/|$) - [F,L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^ index.php [L,QSA]
+</IfModule>

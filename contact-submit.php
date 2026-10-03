@@ -2,22 +2,21 @@
 /* Contact form endpoint: validates, stores the lead, emails the team. JSON for fetch(), redirect without JS. */
 require __DIR__ . '/inc/bootstrap.php';
 
-$ajax = str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json');
+define('AJAX', str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json'));
 
 function done(bool $ok, string $code = ''): never
 {
-    global $ajax;
-    if ($ajax) {
+    if (AJAX) {
         http_response_code($ok ? 200 : 422);
         header('Content-Type: application/json');
         echo json_encode(['ok' => $ok, 'error' => FORM_ERRORS[$code] ?? '']);
     } else {
-        header('Location: contact.php?' . ($ok ? 'sent=1' : 'error=' . $code) . '#contact-form');
+        header('Location: ' . url('contact') . '?' . ($ok ? 'sent=1' : 'error=' . $code) . '#contact-form');
     }
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') { header('Location: contact.php'); exit; }
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') { header('Location: ' . url('contact')); exit; }
 
 // Bots fill the hidden field; pretend it worked.
 if (trim((string)($_POST['website'] ?? '')) !== '') done(true);

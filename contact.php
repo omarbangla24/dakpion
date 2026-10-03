@@ -9,11 +9,8 @@ $wa = setting('whatsapp');
 $sent = isset($_GET['sent']);
 $error = FORM_ERRORS[$_GET['error'] ?? ''] ?? '';
 
-page_start('contact', 'Contact — Dakpion IMC',
-    'Get in touch with Dakpion IMC for a free marketing audit and a tailored 360° marketing proposal.');
-
-page_hero('Contact', 'Contact', 'Let’s talk<br><span class="hl">growth.</span>',
-    'Tell us about your brand and goals. A strategist will reply within one business day — with next steps and a free marketing audit.');
+page_start('contact');
+page_hero('Contact', 'Contact', heading(t('contact', 'hero_title')), t('contact', 'hero_lead'));
 ?>
 
 <section class="section" style="padding-top:0">
@@ -36,7 +33,7 @@ page_hero('Contact', 'Contact', 'Let’s talk<br><span class="hl">growth.</span>
       </ul>
     </div>
     <div class="form" id="contact-form" data-reveal>
-      <form data-form<?= $sent ? ' style="display:none"' : '' ?> action="contact-submit.php" method="post" novalidate>
+      <form data-form<?= $sent ? ' style="display:none"' : '' ?> action="<?= url('contact-submit') ?>" method="post" novalidate>
         <div class="hp" aria-hidden="true"><label>Website <input name="website" tabindex="-1" autocomplete="off"></label></div>
         <div class="form-row">
           <div class="field"><label for="f-name">Your name *</label><input id="f-name" name="name" required maxlength="120" autocomplete="name"></div>
@@ -53,7 +50,7 @@ page_hero('Contact', 'Contact', 'Let’s talk<br><span class="hl">growth.</span>
         </div>
         <div class="field"><label for="f-msg">Tell us about your project *</label><textarea id="f-msg" name="message" required maxlength="5000" placeholder="Goals, timelines, current challenges…"></textarea></div>
         <p class="form-error" role="alert"<?= $error ? '' : ' hidden' ?>><?= e($error) ?></p>
-        <button class="btn btn--lime btn--lg" type="submit" style="width:100%" data-magnetic=".1">Send message <?= icon('arrow-ur') ?></button>
+        <button class="btn btn--lime btn--lg" type="submit" style="width:100%" data-magnetic=".1"><?= e(t('contact', 'form_button')) ?> <?= icon('arrow-ur') ?></button>
       </form>
       <div class="form-success<?= $sent ? ' show' : '' ?>" role="status">
         <div class="ok"><?= icon('check') ?></div>

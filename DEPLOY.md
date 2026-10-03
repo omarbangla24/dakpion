@@ -18,27 +18,29 @@ Plain PHP site with a built-in admin panel. It needs no framework or Composer, a
 
 The database (`data/site.sqlite`) is created automatically on the first visit and filled with the current site content.
 
-## Admin panel
+## Admin panel (`/admin`)
 
-| Section | What you can edit |
+| Section | What you can do |
 | --- | --- |
-| Messages | Contact form submissions: read, reply, mark unread, delete, download CSV |
-| Contact info | Email, phone, WhatsApp (shows a floating button), address, map, hours |
-| Social links | Facebook, Instagram, LinkedIn, YouTube, TikTok (only filled ones show) |
-| Company | Brand and legal name, tagline, About page story, careers link |
-| Home hero | Headline, the scroll-changing words, sub text, "Who we are" text |
-| Contact form | Notification email, budget options, success message |
-| SEO & tracking | Share image, GA4 ID, Meta Pixel ID, Search Console code, placeholder notes |
-| Portfolio, Team, Testimonials, Client logos, Stats, FAQ | Add, edit, delete, reorder, hide |
-| Services, Packages, Industries, Process, Values, Journey | Page content |
+| Dashboard | Visits and messages per day, conversion rate, pipeline, top pages, follow-ups due, launch checklist |
+| Messages | Leads from the contact form: status (New → Contacted → Proposal → Won/Lost), notes, follow-up date, search, CSV |
+| Pages & SEO | Every page's headings, text and buttons, plus SEO title and description with a Google preview |
+| Blog | Write posts in a visual editor (headings, lists, links, images), categories, cover, schedule, SEO |
+| Media library | Drag-and-drop upload, search, copy link, delete (warns where an image is used); every image field can pick from it |
+| Offer bar & popup | Announcement bar on top of every page, and a timed popup with "show again" frequency |
+| Portfolio, Team, Testimonials, Client logos, Stats, FAQ, Services, Packages, Industries, Process, Values, Journey | Add, edit, duplicate, delete, hide, drag to reorder |
+| Settings (admin only) | Contact info, social links, company, contact form, SEO & tracking IDs |
+| Users (admin only) | Staff accounts. **Admin** has full access. **Editor** can manage content, pages, blog, media, messages and offers, but not settings, users or backup |
+| Activity log (admin only) | Who changed what, and when |
+| Backup (admin only) | One-click download of the database plus images (.zip), or the database alone |
+
+## Clean URLs
+
+Pages live at `/about`, `/services`, `/blog/post-name` and so on. `.htaccess` sends old `.html` and `.php` links to these addresses with permanent redirects. `/sitemap.xml` and `/robots.txt` are generated automatically. For local testing without Apache, run `php -S localhost:8000 tools/dev-router.php`.
 
 ## Email notifications
 
 The form sends mail with PHP `mail()`. Most cPanel hosts deliver it. If emails don't arrive, check spam. Every message is also saved under **Messages**, so nothing is lost.
-
-## Old links
-
-`.htaccess` permanently redirects the old `about.html`, `services.html` and similar URLs to the new `.php` pages.
 
 ## nginx
 
@@ -46,11 +48,16 @@ nginx ignores `.htaccess`. Add these rules to the server block:
 
 ```nginx
 index index.php;
-location ~ ^/(data|inc)/ { deny all; }
-location ~ /\.(git|ht) { deny all; }
+location ~ ^/(data|inc|tools|admin/views|admin/inc)/ { deny all; }
+location ~ /\.(?!well-known) { deny all; }
 location ~ \.(sqlite|md)$ { deny all; }
 location ^~ /uploads/ { location ~ \.php$ { deny all; } }
-rewrite ^/(index|about|services|industries|portfolio|contact)\.html$ /$1.php permanent;
+rewrite ^/(about|services|industries|portfolio|contact)\.(html|php)$ /$1 permanent;
+location = /sitemap.xml { rewrite ^ /sitemap.php last; }
+location = /robots.txt  { rewrite ^ /robots.php last; }
+location ~ ^/blog/([A-Za-z0-9-]+)/?$ { rewrite ^/blog/([A-Za-z0-9-]+)/?$ /blog-post.php?slug=$1 last; }
+location /admin/ { try_files $uri /admin/index.php?$query_string; }
+location / { try_files $uri $uri/ $uri.php?$query_string; }
 ```
 
 ## Extra safety (optional)

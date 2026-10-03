@@ -46,16 +46,7 @@ const SETTINGS = [
         'site_name'  => ['label' => 'Brand name', 'type' => 'text'],
         'legal_name' => ['label' => 'Legal name (footer ©)', 'type' => 'text'],
         'tagline'    => ['label' => 'Tagline (footer)', 'type' => 'text'],
-        'story_1'    => ['label' => 'About — our story, paragraph 1', 'type' => 'textarea'],
-        'story_2'    => ['label' => 'About — our story, paragraph 2', 'type' => 'textarea'],
         'careers_link' => ['label' => '"Join the crew" link', 'type' => 'text', 'help' => 'URL ba mailto:jobs@… — khali thakle Contact page e jabe'],
-    ]],
-    'home' => ['label' => 'Home hero', 'fields' => [
-        'hero_kicker' => ['label' => 'Small text above headline', 'type' => 'text'],
-        'hero_line1'  => ['label' => 'Headline — first line', 'type' => 'text'],
-        'hero_words'  => ['label' => 'Headline — changing words', 'type' => 'tags', 'help' => 'Comma diye, scroll korle ekta ekta kore ashe'],
-        'hero_sub'    => ['label' => 'Sub text', 'type' => 'textarea'],
-        'manifesto'   => ['label' => '"Who we are" statement', 'type' => 'textarea', 'help' => '*star er moddhe* lekha highlight hobe'],
     ]],
     'form' => ['label' => 'Contact form', 'fields' => [
         'notify_email'  => ['label' => 'Notun message ashle kon email e jabe', 'type' => 'email', 'help' => 'Khali thakle shudhu admin panel e joma hobe'],
@@ -69,6 +60,20 @@ const SETTINGS = [
         'pixel_id'      => ['label' => 'Meta Pixel ID', 'type' => 'text'],
         'gsc_verify'    => ['label' => 'Google Search Console verification code', 'type' => 'text', 'help' => 'Shudhu content="…" er value ta'],
         'show_notes'    => ['label' => '"Placeholder" note gula dekhabe', 'type' => 'check', 'help' => 'Ashol data dewar por off kore din'],
+    ]],
+    'popup' => ['label' => 'Offer bar & popup', 'fields' => [
+        'bar_on'       => ['label' => 'Top offer bar dekhabe', 'type' => 'check'],
+        'bar_text'     => ['label' => 'Bar text', 'type' => 'text', 'help' => 'Jemon: Free marketing audit — this month only'],
+        'bar_link_text'=> ['label' => 'Bar link text', 'type' => 'text', 'help' => 'Jemon: Book now'],
+        'bar_link'     => ['label' => 'Bar link', 'type' => 'text', 'help' => 'Jemon: contact ba https://…'],
+        'popup_on'     => ['label' => 'Popup dekhabe', 'type' => 'check'],
+        'popup_title'  => ['label' => 'Popup title', 'type' => 'text'],
+        'popup_text'   => ['label' => 'Popup text', 'type' => 'textarea'],
+        'popup_image'  => ['label' => 'Popup image (optional)', 'type' => 'image'],
+        'popup_button' => ['label' => 'Button text', 'type' => 'text'],
+        'popup_link'   => ['label' => 'Button link', 'type' => 'text', 'help' => 'Jemon: contact'],
+        'popup_delay'  => ['label' => 'Koto second por dekhabe', 'type' => 'number'],
+        'popup_every'  => ['label' => 'Ekjon visitor ke abar dekhabe', 'type' => 'select', 'options' => ['session' => 'Proti visit e ekbar', 'day' => 'Dine ekbar', 'week' => 'Shoptahe ekbar', 'once' => 'Shudhu ekbar']],
     ]],
 ];
 
@@ -172,8 +177,120 @@ const FORM_ERRORS = [
     'rate' => 'Too many messages from your network. Please email or call us instead.',
 ];
 
-/* Admin sidebar order */
+/* Collections in the admin sidebar */
 const ADMIN_MENU = [
     'Content' => ['projects', 'team', 'testimonials', 'clients', 'stats', 'faqs'],
-    'Pages'   => ['services', 'packages', 'industries', 'process', 'values', 'timeline'],
+    'Sections' => ['services', 'packages', 'industries', 'process', 'values', 'timeline'],
+];
+
+const LEAD_STATUSES = ['new' => 'New', 'contacted' => 'Contacted', 'proposal' => 'Proposal sent', 'won' => 'Won', 'lost' => 'Lost'];
+
+/* admin: everything. editor: content, pages, blog, media, messages — no settings, users or backup. */
+const ROLES = ['admin' => 'Admin', 'editor' => 'Editor'];
+
+/*
+ * Editable text of each page. Stored in settings as "<page>.<field>".
+ * heading fields: *word* = green highlight, a new line = line break.
+ */
+const SEO_FIELDS = ['seo_title' => 'SEO title (Google e je title dekhabe)', 'seo_desc' => 'SEO description (Google e title er niche)'];
+
+const PAGES = [
+    'global' => ['label' => 'Shared sections', 'fields' => [
+        'stats_title'   => ['heading', 'Stats section heading', "Small team energy.\nBig brand results."],
+        'header_button' => ['text', 'Header button', "Let's talk"],
+        'footer_title'  => ['heading', 'Footer heading', "Got a brand\nto grow?"],
+        'footer_button' => ['text', 'Footer button', 'Start a project'],
+    ]],
+    'home' => ['label' => 'Home', 'path' => '', 'fields' => [
+        'seo_title'     => ['text', SEO_FIELDS['seo_title'], 'Dakpion IMC — 360° Marketing Solutions Agency in Bangladesh'],
+        'seo_desc'      => ['textarea', SEO_FIELDS['seo_desc'], 'Dakpion IMC is a 360° marketing agency in Dhaka — strategy, creative, social media, performance ads, SEO, video, media, PR and activation under one roof.'],
+        'hero_kicker'   => ['text', 'Hero — small text above headline', 'Dakpion IMC — 360° Marketing'],
+        'hero_line1'    => ['text', 'Hero — headline first line', 'We make brands'],
+        'hero_words'    => ['tags', 'Hero — changing words (comma diye)', 'loved, seen, shared, talked about, chosen'],
+        'hero_sub'      => ['textarea', 'Hero — sub text', 'Strategy, creative, digital, media and activation — one team, one plan, one set of numbers.'],
+        'hero_cta'      => ['text', 'Hero — main button', 'Start a project'],
+        'hero_cta2'     => ['text', 'Hero — second button', 'Our services'],
+        'manifesto'     => ['textarea', '"Who we are" statement (*word* = highlight)', 'We’re Dakpion — a 360° marketing agency from Dhaka. We don’t sell channels. We build brands that show up everywhere your customer looks — on screens, streets, shelves and feeds — with *one idea, one voice and one goal: growth.*'],
+        'manifesto_foot'=> ['textarea', '"Who we are" small text', 'Strategists, designers, writers, filmmakers, media planners, developers and activation crews — under one roof, working from one plan.'],
+        'services_title'=> ['heading', 'Services heading', "Eight ways\nwe grow *brands.*"],
+        'services_lead' => ['textarea', 'Services text', 'Use one, or plug them all together. Every service is built to work as part of a single 360° plan.'],
+        'work_title'    => ['heading', 'Selected work heading', "Campaigns that\n*moved* numbers."],
+        'process_title' => ['heading', 'Process heading', "Brief to\nresults in five."],
+        'process_lead'  => ['textarea', 'Process text', "A clear, accountable process — you always know what's happening, why, and what it's delivering."],
+        'team_title'    => ['heading', 'Team heading', "People behind\nthe *360°.*"],
+        'quotes_title'  => ['heading', 'Testimonials heading', "Don't take\nour word for it."],
+        'blog_title'    => ['heading', 'Latest blog heading', "Fresh from\nthe *blog.*"],
+        'faq_title'     => ['heading', 'FAQ heading', "Good\nquestions."],
+        'faq_lead'      => ['textarea', 'FAQ text', "Can't find your answer? The first consultation is free."],
+        'cta_title'     => ['heading', 'Bottom CTA heading', "Let’s make\nsome *noise.*"],
+        'cta_text'      => ['textarea', 'Bottom CTA text', 'Book a free marketing audit. We’ll review your brand, channels and numbers — and show you exactly where the growth is.'],
+        'cta_button'    => ['heading', 'Bottom CTA round button', "Start a\nproject"],
+    ]],
+    'about' => ['label' => 'About', 'path' => 'about', 'fields' => [
+        'seo_title'     => ['text', SEO_FIELDS['seo_title'], 'About Us & Team — Dakpion IMC'],
+        'seo_desc'      => ['textarea', SEO_FIELDS['seo_desc'], 'Dakpion IMC is a 360° integrated marketing communications agency in Dhaka, Bangladesh. Meet the team behind strategy, creative, digital, media and activation.'],
+        'hero_title'    => ['heading', 'Page heading', "Cultivating ideas.\nCrafting *success.*"],
+        'hero_lead'     => ['textarea', 'Page intro', 'An integrated marketing communications agency from Dhaka, built on one belief: brands grow fastest when every touchpoint works together.'],
+        'story_title'   => ['heading', 'Story heading', "From studio\nto *360°.*"],
+        'story_1'       => ['textarea', 'Story — paragraph 1', 'Dakpion started as a small creative and digital studio, and grew by helping healthcare professionals across Bangladesh build trusted brands online. Then our clients asked for more — TV commercials, billboards, events, media buying.'],
+        'story_2'       => ['textarea', 'Story — paragraph 2', 'So we built it. Today strategists, designers, writers, filmmakers, media planners, developers and activation crews work under one roof for brands in healthcare, FMCG, real estate, education, e-commerce and more.'],
+        'values_title'  => ['heading', 'Values heading', "Four rules\nwe live by."],
+        'journey_title' => ['heading', 'Journey heading', "How we\ngot here."],
+        'team_title'    => ['heading', 'Team heading', "The crew\nbehind the *360°.*"],
+        'team_lead'     => ['textarea', 'Team text', 'Specialists in every discipline — one team, sitting together, working on your brand.'],
+        'cta_title'     => ['heading', 'Bottom CTA heading', "Let’s build\nsomething *bold.*"],
+        'cta_text'      => ['textarea', 'Bottom CTA text', 'Launch, rebrand or year-round growth — we’d love to hear about it.'],
+        'cta_button'    => ['heading', 'Bottom CTA round button', "Start a\nproject"],
+    ]],
+    'services' => ['label' => 'Services', 'path' => 'services', 'fields' => [
+        'seo_title'     => ['text', SEO_FIELDS['seo_title'], 'Services — 360° Marketing Solutions | Dakpion IMC'],
+        'seo_desc'      => ['textarea', SEO_FIELDS['seo_desc'], 'Brand strategy, creative, social media, performance marketing, SEO, video production, web, ATL media, PR and BTL activation — integrated marketing services by Dakpion IMC.'],
+        'hero_title'    => ['heading', 'Page heading', "Every channel.\nOne *plan.*"],
+        'hero_lead'     => ['textarea', 'Page intro', 'Strategy, creative, digital, production, media and activation — eight disciplines working as one team, so your brand speaks with one voice everywhere.'],
+        'packages_title'=> ['heading', 'Packages heading', "Start small.\nGo *360°.*"],
+        'packages_lead' => ['textarea', 'Packages text', 'Every package is tailored after a free discovery call — these are the most common ways brands start with us.'],
+        'cta_title'     => ['heading', 'Bottom CTA heading', "Not sure\nwhere to *start?*"],
+        'cta_text'      => ['textarea', 'Bottom CTA text', 'Tell us your goal. We’ll recommend the right channel mix and a realistic plan for your budget — free.'],
+        'cta_button'    => ['heading', 'Bottom CTA round button', "Talk to a\nstrategist"],
+    ]],
+    'industries' => ['label' => 'Industries', 'path' => 'industries', 'fields' => [
+        'seo_title'     => ['text', SEO_FIELDS['seo_title'], 'Industries We Serve — Dakpion IMC'],
+        'seo_desc'      => ['textarea', SEO_FIELDS['seo_desc'], 'Integrated marketing for healthcare, FMCG, real estate, e-commerce, education, corporate, hospitality and fashion brands in Bangladesh.'],
+        'hero_title'    => ['heading', 'Page heading', "Different\nmarkets. One *360°.*"],
+        'hero_lead'     => ['textarea', 'Page intro', 'Every industry buys differently. We bring category know-how, proven channel mixes and compliant creative to the sectors we know best.'],
+        'cta_title'     => ['heading', 'Bottom CTA heading', "Don’t see\nyour *industry?*"],
+        'cta_text'      => ['textarea', 'Bottom CTA text', 'Our 360° approach adapts to any category. Tell us about your business and we’ll show you what’s possible.'],
+        'cta_button'    => ['heading', 'Bottom CTA round button', "Start a\nconversation"],
+    ]],
+    'work' => ['label' => 'Work', 'path' => 'portfolio', 'fields' => [
+        'seo_title'     => ['text', SEO_FIELDS['seo_title'], 'Our Work — Case Studies | Dakpion IMC'],
+        'seo_desc'      => ['textarea', SEO_FIELDS['seo_desc'], 'Integrated campaigns, brand identities, performance marketing and activations delivered by Dakpion IMC.'],
+        'hero_title'    => ['heading', 'Page heading', "Ideas that\n*performed.*"],
+        'hero_lead'     => ['textarea', 'Page intro', 'A selection of integrated campaigns, brand builds and performance programs across industries.'],
+        'cta_title'     => ['heading', 'Bottom CTA heading', "Want results\nlike *these?*"],
+        'cta_text'      => ['textarea', 'Bottom CTA text', 'Share your goals and we’ll put together a tailored 360° plan and proposal.'],
+        'cta_button'    => ['heading', 'Bottom CTA round button', "Get a\nproposal"],
+    ]],
+    'blog' => ['label' => 'Blog', 'path' => 'blog', 'fields' => [
+        'seo_title'     => ['text', SEO_FIELDS['seo_title'], 'Blog — Marketing Insights | Dakpion IMC'],
+        'seo_desc'      => ['textarea', SEO_FIELDS['seo_desc'], 'Marketing insights, campaign stories and practical playbooks from the Dakpion IMC team in Dhaka.'],
+        'hero_title'    => ['heading', 'Page heading', "Ideas worth\n*sharing.*"],
+        'hero_lead'     => ['textarea', 'Page intro', 'Marketing insights, campaign stories and practical playbooks from the Dakpion team.'],
+        'cta_title'     => ['heading', 'Bottom CTA heading (post er niche)', "Like what\nyou *read?*"],
+        'cta_text'      => ['textarea', 'Bottom CTA text', 'Let’s put these ideas to work for your brand. The first consultation is free.'],
+        'cta_button'    => ['heading', 'Bottom CTA round button', "Start a\nproject"],
+    ]],
+    'contact' => ['label' => 'Contact', 'path' => 'contact', 'fields' => [
+        'seo_title'     => ['text', SEO_FIELDS['seo_title'], 'Contact — Dakpion IMC'],
+        'seo_desc'      => ['textarea', SEO_FIELDS['seo_desc'], 'Get in touch with Dakpion IMC for a free marketing audit and a tailored 360° marketing proposal.'],
+        'hero_title'    => ['heading', 'Page heading', "Let’s talk\n*growth.*"],
+        'hero_lead'     => ['textarea', 'Page intro', 'Tell us about your brand and goals. A strategist will reply within one business day — with next steps and a free marketing audit.'],
+        'form_button'   => ['text', 'Form button', 'Send message'],
+    ]],
+];
+
+/* Keys that lived in settings before page text existed: old key => new key */
+const MOVED_SETTINGS = [
+    'hero_kicker' => 'home.hero_kicker', 'hero_line1' => 'home.hero_line1', 'hero_words' => 'home.hero_words',
+    'hero_sub' => 'home.hero_sub', 'manifesto' => 'home.manifesto', 'story_1' => 'about.story_1', 'story_2' => 'about.story_2',
 ];

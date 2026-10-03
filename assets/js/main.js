@@ -112,6 +112,34 @@
     }));
   }
 
+  /* Offer popup: shows after its delay, at most once per session/day/week/ever (set in the admin). */
+  function initPopup() {
+    const pop = $('#offer-popup');
+    if (!pop) return;
+    const key = 'dk-pop-' + pop.dataset.key, every = pop.dataset.every;
+    const ttl = { day: 864e5, week: 6048e5 }[every];
+    const store = every === 'session' ? sessionStorage : localStorage;
+    try {
+      const seen = store.getItem(key);
+      if (seen && (every !== 'day' && every !== 'week' || Date.now() - +seen < ttl)) return;
+    } catch (e) {}
+    const close = () => {
+      pop.classList.remove('show');
+      setTimeout(() => { pop.hidden = true; }, 350);
+      document.removeEventListener('keydown', onKey);
+    };
+    const onKey = e => { if (e.key === 'Escape') close(); };
+    setTimeout(() => {
+      if (root.classList.contains('menu-open')) return;
+      pop.hidden = false;
+      requestAnimationFrame(() => pop.classList.add('show'));
+      try { store.setItem(key, String(Date.now())); } catch (e) {}
+      document.addEventListener('keydown', onKey);
+      $('.popup-card', pop)?.focus({ preventScroll: true });
+    }, Math.max(0, +pop.dataset.delay || 0) * 1000);
+    pop.addEventListener('click', e => { if (e.target === pop || e.target.closest('[data-popup-close]')) close(); });
+  }
+
   function initRotator() {
     $$('.rotator').forEach(r => {
       const words = $$('span', r);
@@ -488,6 +516,7 @@
     initFaq();
     initFilter();
     initForms();
+    initPopup();
     initRotator();
     window.__animReady = true;
 

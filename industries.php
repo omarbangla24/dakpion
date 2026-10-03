@@ -1,11 +1,8 @@
 <?php
 require __DIR__ . '/inc/layout.php';
 
-page_start('industries', 'Industries We Serve — Dakpion IMC',
-    'Integrated marketing for healthcare, FMCG, real estate, e-commerce, education, corporate, hospitality and fashion brands in Bangladesh.');
-
-page_hero('Industries', 'Industries', 'Different<br>markets. One <span class="hl">360°.</span>',
-    'Every industry buys differently. We bring category know-how, proven channel mixes and compliant creative to the sectors we know best.');
+page_start('industries');
+page_hero('Industries', 'Industries', heading(t('industries', 'hero_title')), t('industries', 'hero_lead'));
 ?>
 
 <section class="section" style="padding-top:0">
@@ -22,7 +19,6 @@ page_hero('Industries', 'Industries', 'Different<br>markets. One <span class="hl
 
 <?php stats_section(); ?>
 
-<?php cta_section('Don’t see<br>your <span class="hl">industry?</span>',
-    'Our 360° approach adapts to any category. Tell us about your business and we’ll show you what’s possible.', 'Start a<br>conversation'); ?>
+<?php cta_section('industries'); ?>
 
 <?php page_end();

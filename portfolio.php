@@ -5,11 +5,8 @@ $projects = items('projects');
 $used = [];
 foreach ($projects as $p) foreach (explode(',', (string)$p['cats']) as $c) $used[trim($c)] = true;
 
-page_start('work', 'Our Work — Case Studies | Dakpion IMC',
-    'Integrated campaigns, brand identities, performance marketing and activations delivered by Dakpion IMC.');
-
-page_hero('Work', 'Our work', 'Ideas that<br><span class="hl">performed.</span>',
-    'A selection of integrated campaigns, brand builds and performance programs across industries.');
+page_start('work');
+page_hero('Work', 'Our work', heading(t('work', 'hero_title')), t('work', 'hero_lead'));
 ?>
 
 <section class="section" style="padding-top:0">
@@ -17,7 +14,7 @@ page_hero('Work', 'Our work', 'Ideas that<br><span class="hl">performed.</span>'
     <div class="filter" role="group" aria-label="Filter work" data-reveal><button data-filter="all" aria-pressed="true" class="active">All work</button><?php foreach (WORK_CATEGORIES as $k => $label): if (isset($used[$k])): ?><button data-filter="<?= $k ?>" aria-pressed="false"><?= e($label) ?></button><?php endif; endforeach; ?></div>
     <div class="work-grid">
 <?php foreach ($projects as $p): $link = safe_url($p['video']); ?>
-      <a class="work-card" href="<?= e($link ?: 'contact.php') ?>"<?= $link ? ' target="_blank" rel="noopener"' : '' ?> data-cat="<?= e(str_replace(',', ' ', (string)$p['cats'])) ?>" data-cursor="View" data-reveal>
+      <a class="work-card" href="<?= e($link ?: url('contact')) ?>"<?= $link ? ' target="_blank" rel="noopener"' : '' ?> data-cat="<?= e(str_replace(',', ' ', (string)$p['cats'])) ?>" data-cursor="View" data-reveal>
         <?= thumb($p) ?>
         <div class="work-info"><span class="m"><?= e($p['kind']) ?></span><h3><?= e($p['title']) ?></h3><p><?= e($p['summary']) ?></p><div class="tags"><?php foreach (tags($p['tags']) as $t): ?><span class="tag"><?= e($t) ?></span><?php endforeach; ?></div></div>
       </a>
@@ -27,7 +24,6 @@ page_hero('Work', 'Our work', 'Ideas that<br><span class="hl">performed.</span>'
   </div>
 </section>
 
-<?php cta_section('Want results<br>like <span class="hl">these?</span>',
-    'Share your goals and we’ll put together a tailored 360° plan and proposal.', 'Get a<br>proposal'); ?>
+<?php cta_section('work'); ?>
 
 <?php page_end();

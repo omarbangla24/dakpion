@@ -3,11 +3,33 @@ Options -Indexes
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  # Old static URLs → PHP pages
-  RewriteRule ^(index|about|services|industries|portfolio|contact)\.html$ $1.php [R=301,L]
-  # Never serve the database, PHP includes or repo files
-  RewriteRule ^(data|inc)(/|$) - [F,L]
-  RewriteRule (^|/)\.git - [F,L]
+
+  # BASE = web path of this folder ("/" or "/subfolder/"), so the rules work in a subfolder too
+  RewriteCond %{REQUEST_URI}::$1 ^(.*?/)(.*)::\2$
+  RewriteRule ^(.*)$ - [E=BASE:%1]
+
+  # Private folders and dotfiles (Let's Encrypt's .well-known stays reachable)
+  RewriteRule ^(data|inc|tools)(/|$) - [F,L]
+  RewriteRule (^|/)\.(?!well-known/) - [F,L]
+
+  # Old addresses → clean URLs
+  RewriteRule ^index\.html$ %{ENV:BASE} [R=301,L]
+  RewriteRule ^(about|services|industries|portfolio|contact)\.html$ %{ENV:BASE}$1 [R=301,L]
+  RewriteCond %{REQUEST_METHOD} =GET
+  RewriteCond %{THE_REQUEST} \s[^\s?]*\.php[\s?]
+  RewriteRule ^index\.php$ %{ENV:BASE} [R=301,L]
+  RewriteCond %{REQUEST_METHOD} =GET
+  RewriteCond %{THE_REQUEST} \s[^\s?]*\.php[\s?]
+  RewriteRule ^(about|services|industries|portfolio|contact|blog)\.php$ %{ENV:BASE}$1 [R=301,L]
+
+  # Clean URLs → PHP files
+  RewriteRule ^sitemap\.xml$ sitemap.php [L]
+  RewriteRule ^robots\.txt$ robots.php [L]
+  RewriteRule ^blog/([A-Za-z0-9-]+)/?$ blog-post.php?slug=$1 [L,QSA]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME}.php -f
+  RewriteRule ^([A-Za-z0-9-]+)/?$ $1.php [L]
 </IfModule>
 
 <FilesMatch "\.(sqlite|sqlite-journal|md)$">
